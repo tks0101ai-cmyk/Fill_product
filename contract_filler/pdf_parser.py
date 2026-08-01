@@ -2,8 +2,6 @@ import re
 
 import pdfplumber
 
-BUYER_MARKER = "Tên đơn vị(Company's name):"
-
 
 def _find(pattern, text):
     match = re.search(pattern, text)
@@ -14,23 +12,6 @@ def _parse_number(value):
     if not value:
         return 0
     return int(value.replace(".", "").replace(",", "").strip())
-
-
-def parse_parties(text):
-    split_at = text.index(BUYER_MARKER)
-    seller_block, buyer_block = text[:split_at], text[split_at:]
-
-    seller = {
-        "name": _find(r"Đơn vị bán hàng[^:]*:\s*(.+)", seller_block),
-        "tax_code": _find(r"Mã số thuế[^:]*:\s*(\S+)", seller_block),
-        "address": _find(r"Địa chỉ[^:]*:\s*(.+)", seller_block),
-    }
-    buyer = {
-        "name": _find(r"Tên đơn vị[^:]*:\s*(.+)", buyer_block),
-        "address": _find(r"Địa chỉ[^:]*:\s*(.+)", buyer_block),
-        "tax_code": _find(r"Mã số thuế[^:]*:\s*(\S+)", buyer_block),
-    }
-    return seller, buyer
 
 
 def parse_line_items(pdf_path):

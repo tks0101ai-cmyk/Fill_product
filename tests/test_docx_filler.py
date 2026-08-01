@@ -34,15 +34,22 @@ SELLER = {
     "name": "CÔNG TY CỔ PHẦN THƯƠNG MẠI XUẤT NHẬP KHẨU TKS GROUP",
     "tax_code": "0110534607",
     "address": "Số 9 đường Lê Văn Huấn, Cụm công nghiệp Cầu Nổi, Xã Sơn Đồng, Thành phố Hà Nội, Việt Nam",
+    "bank_account": "6062.666.88888",
+    "bank_name": "Ngân hàng TMCP Quân đội – PGD Đông Đô",
+    "representative": "Nguyễn Xuân Khoa",
+    "position": "Giám đốc",
 }
 BUYER = {
     "name": "HỘ KINH DOANH TIỆM 81",
     "tax_code": "064200012728",
     "address": "201/65/9 Nguyễn Xí, Phường Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam",
+    "bank_account": "VCB 0123456789",
+    "representative": "Trần Văn Tiệm",
+    "position": "Chủ hộ",
 }
 
 
-def test_fill_party_info_sets_names_and_clears_unknown_fields():
+def test_fill_party_info_fills_seller_and_buyer_from_their_dicts():
     document = docx.Document("tests/fixtures/sample_template.docx")
 
     fill_party_info(document, SELLER, BUYER)
@@ -58,14 +65,33 @@ def test_fill_party_info_sets_names_and_clears_unknown_fields():
     table_a_text = "\n".join(_row_text(row) for row in document.tables[0].rows)
     assert SELLER["address"] in table_a_text
     assert SELLER["tax_code"] in table_a_text
-    assert "Nguyễn Thị B" not in table_a_text  # rep cleared
-    assert "898896886" not in table_a_text  # bank account cleared
+    assert SELLER["bank_account"] in table_a_text
+    assert SELLER["bank_name"] in table_a_text
+    assert SELLER["representative"] in table_a_text
+    assert SELLER["position"] in table_a_text
 
     table_b_text = "\n".join(_row_text(row) for row in document.tables[1].rows)
     assert BUYER["address"] in table_b_text
     assert BUYER["tax_code"] in table_b_text
-    assert "Huỳnh Tấn Hải" not in table_b_text  # rep cleared
-    assert "113003051756" not in table_b_text  # account cleared
+    assert BUYER["bank_account"] in table_b_text
+    assert BUYER["representative"] in table_b_text
+    assert BUYER["position"] in table_b_text
+    assert "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam – Đồng Nai" not in table_b_text  # buyer bank name always blank
+
+
+def test_fill_party_info_leaves_missing_fields_blank():
+    document = docx.Document("tests/fixtures/sample_template.docx")
+    minimal_seller = {"name": "CÔNG TY TỐI GIẢN"}
+    minimal_buyer = {"name": "HỘ KINH DOANH TỐI GIẢN"}
+
+    fill_party_info(document, minimal_seller, minimal_buyer)
+
+    full_text = "\n".join(p.text for p in document.paragraphs)
+    assert "ABCC" not in full_text
+    assert "Nguyễn Thị B" not in full_text
+    assert "Huỳnh Tấn Hải" not in full_text
+    assert "898896886" not in full_text
+    assert "113003051756" not in full_text
 
 
 from contract_filler.docx_filler import fill_contract_meta

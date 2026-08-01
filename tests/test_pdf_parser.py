@@ -1,5 +1,4 @@
 import pdfplumber
-from contract_filler.pdf_parser import parse_parties
 
 FIXTURE = "tests/fixtures/sample_invoice.pdf"
 
@@ -7,23 +6,6 @@ FIXTURE = "tests/fixtures/sample_invoice.pdf"
 def _full_text():
     with pdfplumber.open(FIXTURE) as pdf:
         return "\n".join(page.extract_text() for page in pdf.pages)
-
-
-def test_parse_parties_extracts_seller_and_buyer():
-    seller, buyer = parse_parties(_full_text())
-
-    assert seller["name"] == "CÔNG TY CỔ PHẦN THƯƠNG MẠI XUẤT NHẬP KHẨU TKS GROUP"
-    assert seller["tax_code"] == "0110534607"
-    assert seller["address"] == (
-        "Số 9 đường Lê Văn Huấn, Cụm công nghiệp Cầu Nổi, "
-        "Xã Sơn Đồng, Thành phố Hà Nội, Việt Nam"
-    )
-
-    assert buyer["name"] == "HỘ KINH DOANH TIỆM 81"
-    assert buyer["tax_code"] == "064200012728"
-    assert buyer["address"] == (
-        "201/65/9 Nguyễn Xí, Phường Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam"
-    )
 
 
 from contract_filler.pdf_parser import parse_line_items

@@ -32,7 +32,7 @@ def replace_in_paragraph(paragraph, old, new):
     return True
 
 
-def _replace_in_row(row, old, new):
+def replace_in_row(row, old, new):
     for cell in row.cells:
         for paragraph in cell.paragraphs:
             if replace_in_paragraph(paragraph, old, new):
@@ -54,29 +54,31 @@ def fill_party_info(document, seller, buyer):
             )
 
     table_a = document.tables[0]
-    _replace_in_row(table_a.rows[0], "ABCC", seller["address"])
-    _replace_in_row(table_a.rows[1], "0433859844", seller["tax_code"])
-    _replace_in_row(table_a.rows[2], "898896886", "")
-    _replace_in_row(table_a.rows[3], "Ngân hàng TMCP QUÂN ĐỘI - MBANK", "")
-    _replace_in_row(table_a.rows[4], "Nguyễn Thị B", "")
-    _replace_in_row(table_a.rows[5], "Giám đốc", "")
+    replace_in_row(table_a.rows[0], "ABCC", seller.get("address", ""))
+    replace_in_row(table_a.rows[1], "0433859844", seller.get("tax_code", ""))
+    replace_in_row(table_a.rows[2], "898896886", seller.get("bank_account", ""))
+    replace_in_row(
+        table_a.rows[3], "Ngân hàng TMCP QUÂN ĐỘI - MBANK", seller.get("bank_name", "")
+    )
+    replace_in_row(table_a.rows[4], "Nguyễn Thị B", seller.get("representative", ""))
+    replace_in_row(table_a.rows[5], "Giám đốc", seller.get("position", ""))
 
     table_b = document.tables[1]
-    _replace_in_row(
+    replace_in_row(
         table_b.rows[0],
         "05 đường M2, Dự án Khu dân cư và Công viên Phước Thiện, Khu phố 28, Phường Long Bình, TP Hồ Chí Minh",
-        buyer["address"],
+        buyer.get("address", ""),
     )
-    _replace_in_row(table_b.rows[1], "0319437919", buyer["tax_code"])
-    _replace_in_row(table_b.rows[2], "0", "")
-    _replace_in_row(table_b.rows[3], "113003051756", "")
-    _replace_in_row(
+    replace_in_row(table_b.rows[1], "0319437919", buyer.get("tax_code", ""))
+    replace_in_row(table_b.rows[2], "0", "")
+    replace_in_row(table_b.rows[3], "113003051756", buyer.get("bank_account", ""))
+    replace_in_row(
         table_b.rows[4],
         "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam – Đồng Nai",
         "",
     )
-    _replace_in_row(table_b.rows[5], "Huỳnh Tấn Hải", "")
-    _replace_in_row(table_b.rows[6], "Giám đốc", "")
+    replace_in_row(table_b.rows[5], "Huỳnh Tấn Hải", buyer.get("representative", ""))
+    replace_in_row(table_b.rows[6], "Giám đốc", buyer.get("position", ""))
 
 
 def fill_contract_meta(document, contract_no, day, month, year):
