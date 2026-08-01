@@ -79,10 +79,14 @@ def test_fill_principle_party_b_sets_fields_and_clears_placeholder():
     )
     assert SELLER["address"] in table_text
     assert SELLER["tax_code"] in table_text
+    assert SELLER["bank_account"] in table_text
+    assert SELLER["bank_name"] in table_text
     assert SELLER["representative"] in table_text
     assert SELLER["position"] in table_text
     assert "PHẠM THẾ PHONG" not in table_text
     assert "0302629806" not in table_text
+    assert "898896886" not in table_text
+    assert "Ngân hàng TMCP QUÂN ĐỘI - MBANK" not in table_text
 
 
 def test_fill_principle_contract_meta_sets_number_and_date():

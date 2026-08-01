@@ -70,12 +70,12 @@ def fill_party_info(document, seller, buyer):
         buyer.get("address", ""),
     )
     replace_in_row(table_b.rows[1], "0319437919", buyer.get("tax_code", ""))
-    replace_in_row(table_b.rows[2], "0", "")
+    replace_in_row(table_b.rows[2], "0", buyer.get("phone", ""))
     replace_in_row(table_b.rows[3], "113003051756", buyer.get("bank_account", ""))
     replace_in_row(
         table_b.rows[4],
         "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam – Đồng Nai",
-        "",
+        buyer.get("bank_name", ""),
     )
     replace_in_row(table_b.rows[5], "Huỳnh Tấn Hải", buyer.get("representative", ""))
     replace_in_row(table_b.rows[6], "Giám đốc", buyer.get("position", ""))

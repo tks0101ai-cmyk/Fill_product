@@ -43,7 +43,9 @@ BUYER = {
     "name": "HỘ KINH DOANH TIỆM 81",
     "tax_code": "064200012728",
     "address": "201/65/9 Nguyễn Xí, Phường Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam",
-    "bank_account": "VCB 0123456789",
+    "phone": "0909123456",
+    "bank_account": "0123456789",
+    "bank_name": "VCB",
     "representative": "Trần Văn Tiệm",
     "position": "Chủ hộ",
 }
@@ -73,10 +75,12 @@ def test_fill_party_info_fills_seller_and_buyer_from_their_dicts():
     table_b_text = "\n".join(_row_text(row) for row in document.tables[1].rows)
     assert BUYER["address"] in table_b_text
     assert BUYER["tax_code"] in table_b_text
+    assert BUYER["phone"] in table_b_text
     assert BUYER["bank_account"] in table_b_text
+    assert BUYER["bank_name"] in table_b_text
     assert BUYER["representative"] in table_b_text
     assert BUYER["position"] in table_b_text
-    assert "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam – Đồng Nai" not in table_b_text  # buyer bank name always blank
+    assert "Ngân hàng Thương mại Cổ phần Công Thương Việt Nam – Đồng Nai" not in table_b_text  # old placeholder gone
 
 
 def test_fill_party_info_leaves_missing_fields_blank():

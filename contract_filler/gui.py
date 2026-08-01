@@ -1,4 +1,5 @@
 import os
+import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
@@ -6,9 +7,18 @@ from contract_filler.generator import generate_sales_contracts
 from contract_filler.principle_generator import generate_principle_contracts
 from contract_filler.seller_list import parse_sellers
 
-DEFAULT_SALES_TEMPLATE = os.path.join(os.getcwd(), "HỢP ĐỒNG MUA BÁN mẫu.docx")
-DEFAULT_PRINCIPLE_TEMPLATE = os.path.join(os.getcwd(), "HỢP ĐỒNG NGUYÊN TẮC mẫu.docx")
-DEFAULT_SELLER_LIST = os.path.join(os.getcwd(), "List bên bán.docx")
+# When packaged by PyInstaller, os.getcwd() reflects whatever directory the
+# exe was launched from (which varies by shortcut/launcher), not the folder
+# the exe actually lives in. Anchor default file lookups to the exe's own
+# directory in that case so the bundled .docx files are found reliably.
+if getattr(sys, "frozen", False):
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    BASE_DIR = os.getcwd()
+
+DEFAULT_SALES_TEMPLATE = os.path.join(BASE_DIR, "HỢP ĐỒNG MUA BÁN mẫu.docx")
+DEFAULT_PRINCIPLE_TEMPLATE = os.path.join(BASE_DIR, "HỢP ĐỒNG NGUYÊN TẮC mẫu.docx")
+DEFAULT_SELLER_LIST = os.path.join(BASE_DIR, "List bên bán.docx")
 
 
 def _load_sellers():

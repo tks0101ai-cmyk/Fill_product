@@ -24,7 +24,7 @@ def fill_principle_party_a(document, entity):
     replace_in_row(table_a.rows[0], "ABC, Hà Nội", entity.get("address", ""))
     replace_in_row(table_a.rows[1], "0123456789", entity.get("tax_code", ""))
     replace_in_row(table_a.rows[2], "686345848", entity.get("bank_account", ""))
-    replace_in_row(table_a.rows[3], "Ngân hàng TMCP Quân đội", "")
+    replace_in_row(table_a.rows[3], "Ngân hàng TMCP Quân đội", entity.get("bank_name", ""))
     replace_in_row(table_a.rows[4], "NGUYỄN VĂN A", entity.get("representative", ""))
     replace_in_row(table_a.rows[5], "Giám đốc", entity.get("position", ""))
 
@@ -49,8 +49,12 @@ def fill_principle_party_b(document, seller):
         seller.get("address", ""),
     )
     replace_in_row(table_b.rows[1], "0302629806", seller.get("tax_code", ""))
-    replace_in_row(table_b.rows[2], "PHẠM THẾ PHONG", seller.get("representative", ""))
-    replace_in_row(table_b.rows[3], "Giám Đốc", seller.get("position", ""))
+    replace_in_row(table_b.rows[2], "898896886", seller.get("bank_account", ""))
+    replace_in_row(
+        table_b.rows[3], "Ngân hàng TMCP QUÂN ĐỘI - MBANK", seller.get("bank_name", "")
+    )
+    replace_in_row(table_b.rows[4], "PHẠM THẾ PHONG", seller.get("representative", ""))
+    replace_in_row(table_b.rows[5], "Giám Đốc", seller.get("position", ""))
 
 
 def fill_principle_contract_meta(document, contract_no, day, month, year):
