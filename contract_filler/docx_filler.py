@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from docx.shared import RGBColor
 from docx.table import _Row
 
 
@@ -147,3 +148,33 @@ def fill_product_table_and_totals(document, items, totals):
                 "Sáu mươi triệu không trăm sáu mươi chín nghìn sáu trăm đồng",
                 totals["amount_in_words"],
             )
+
+
+def _blacken_paragraph(paragraph):
+    for run in paragraph.runs:
+        run.font.color.rgb = RGBColor(0, 0, 0)
+
+
+def _blacken_table(table):
+    for row in table.rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                _blacken_paragraph(paragraph)
+            for nested_table in cell.tables:
+                _blacken_table(nested_table)
+
+
+def force_black_text(document):
+    """Set every run's font color to black, overriding any color inherited
+    from the template so all generated output renders as plain black text."""
+    for paragraph in document.paragraphs:
+        _blacken_paragraph(paragraph)
+    for table in document.tables:
+        _blacken_table(table)
+
+    for section in document.sections:
+        for part in (section.header, section.footer):
+            for paragraph in part.paragraphs:
+                _blacken_paragraph(paragraph)
+            for table in part.tables:
+                _blacken_table(table)

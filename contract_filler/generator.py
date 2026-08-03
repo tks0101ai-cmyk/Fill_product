@@ -10,6 +10,7 @@ from contract_filler.docx_filler import (
     fill_party_info,
     fill_contract_meta,
     fill_product_table_and_totals,
+    force_black_text,
 )
 
 _INVALID_FILENAME_CHARS = re.compile(r'[\\/:*?"<>|]')
@@ -38,6 +39,7 @@ def generate_sales_contracts(
         fill_party_info(document, seller, buyer)
         fill_contract_meta(document, contract_no, day, month, year)
         fill_product_table_and_totals(document, items, totals)
+        force_black_text(document)
 
         filename = f"HĐMB {sanitize_filename(buyer['name'])}.docx"
         output_path = os.path.join(output_dir, filename)
